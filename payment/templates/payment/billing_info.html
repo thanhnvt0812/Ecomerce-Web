@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Billing Information</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Enter your billing information</p>
+        </div>
+    </div>
+</header>
+<br />
+<div class="container">
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"><strong>Order Summary</strong></div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in cart_products %}
+                            <tr>
+                                <th scope="row">{{ product.name }}</th>
+                                {% if product.is_sale %}
+                                <td>${{ product.sale_price }}</td>
+                                {% else %}
+                                <td>${{ product.price }}</td>
+                                {% endif %}
+                                <td>
+                                    {% for key, value in quantities.items %}
+                                    {% if key == product.id|slugify %}
+                                    {{ value }}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div align="right">
+                        <h4>
+                            <small class="text-body-secondary">Total: </small>
+                            <span class="text-primary">${{ totals }}</span>
+                        </h4>
+                        <br>
+                    </div>
+                    <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-warning">Update Items</a>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header"><strong>Billing Info</strong></div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'process_order' %}">
+
+                        {% csrf_token %}
+                        {{billing_form.as_p}}
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-money-bill-wave"></i>
+                                Pay Now
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Info -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"><strong>Shipping Info</strong></div>
+                <div class="card-body">
+
+                    {% csrf_token %}
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>Fullname: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_full_name}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Email: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_email}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Address1: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_address1}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Address2: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_address2}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>City: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_city}}"
+                                        readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>State: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_state}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Zipcode: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_zipcode}}"
+                                        readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Country: </td>
+                                <td><input class="form-control" type="text" value="{{shipping_info.shipping_country}}"
+                                        readonly></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <a href="{% url 'checkout' %}" class="btn btn-warning "> Update Shipping</a>
+
+                </div>
+            </div>
+
+            <br>
+
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
+
+{% endblock %}

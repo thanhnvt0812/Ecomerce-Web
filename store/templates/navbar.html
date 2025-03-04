@@ -10,6 +10,20 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                {% if user.is_superuser %}
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">Orders</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'shipped_dash' %}">Shipped Orders</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'not_shipped_dash'  %}">UnShipped Orders</a></li>
+                    </ul>
+                </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
@@ -26,6 +40,7 @@
                                 Books</a></li>
                         <li><a class="dropdown-item" href="{% url 'category' 'Marketing-Books' %}">Marketing Books</a> -->
                 </li>
+
 
             </ul>
             </li>
